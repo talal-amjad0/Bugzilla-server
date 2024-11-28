@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable 
+  has_many :bugs
   enum user_type: { manager: 0, developer: 1, qa: 2 }
   devise :database_authenticatable, :registerable, :validatable
 
@@ -9,5 +10,5 @@ class User < ApplicationRecord
   def admin?
     user_type == "manager"
   end
-  
+
 end

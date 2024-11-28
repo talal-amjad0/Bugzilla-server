@@ -10,9 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_28_083443) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_28_132533) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "bugs", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.integer "type"
+    t.integer "status"
+    t.string "image"
+    t.datetime "deadline"
+    t.bigint "created_by_id", null: false
+    t.bigint "assignee_id", null: false
+    t.bigint "project_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["assignee_id"], name: "index_bugs_on_assignee_id"
+    t.index ["created_by_id"], name: "index_bugs_on_created_by_id"
+    t.index ["project_id"], name: "index_bugs_on_project_id"
+  end
 
   create_table "projects", force: :cascade do |t|
     t.string "title"
@@ -34,4 +51,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_28_083443) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  add_foreign_key "bugs", "projects"
+  add_foreign_key "bugs", "users", column: "assignee_id"
+  add_foreign_key "bugs", "users", column: "created_by_id"
 end
