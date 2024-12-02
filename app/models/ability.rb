@@ -9,9 +9,14 @@ class Ability
     can :read, :all
 
     # Permissions for managers (admin users)
-    if user.admin?
+    if user.manager?
       can :manage, :all
     end
+
+    if user.qa?
+      can :manage, :bug
+    end
+
     #
     # The first argument to `can` is the action you are giving the user
     # permission to do.

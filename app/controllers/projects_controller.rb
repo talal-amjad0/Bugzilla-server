@@ -19,6 +19,7 @@ class ProjectsController < ApplicationController
   def create
     request_body = JSON.parse(request.body.read)
     @project = Project.new(request_body)
+    @project.manager = current_user
 
     if @project.save
       render json: { message: 'Project created successfully', project: @project }, status: :created
@@ -27,7 +28,7 @@ class ProjectsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /projects/1
+  # /PUT /projects/1
   def update
     request_body = JSON.parse(request.body.read)
     if @project.update(request_body)
