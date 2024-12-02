@@ -1,21 +1,56 @@
 class ProjectUsersController < ApplicationController
     before_action :set_project_user, only: [:update]
     before_action :authenticate_user!
+
+
+    def get_available_users
+        # Find users who are developers or qa and are not already assigned to any project
+        available_users = User
+                           .where(user_type: ['developer', 'qa'])  # Filter by role
+                           .where.not(id: ProjectUser.pluck(:user_id))  # Exclude users already in any project
+    
+        render json: available_users
+    end
   
     def create
-      request_body = JSON.parse(request.body.read)
-  
-      project = Project.find(params[:project_id]) 
-      user = User.find(request_body['user_id']) 
-  
-      if project.users.include?(user)
-        render json: { message: 'User is already assigned to this project' }, status: :unprocessable_entity
-      else
-        # Assign the user to the project
-        project.users << user
-        render json: { message: 'User added to the project successfully' }, status: :created
+        request_body = JSON.parse(request.body.read)
+      
+        project = Project.find(params[:project_id])
+      
+        # Extract the array of user_ids from the request body
+        user_ids = request_body['user_ids']
+      
+        # Find the users by their IDs
+        users = User.where(id: user_ids)
+      
+        # Validate that the users are either 'developer' or 'qa' only
+        invalid_users = users.select { |user| !['developer', 'qa'].include?(user.user_type) }
+        if invalid_users.any?
+          render json: { message: 'The following users have invalid roles (only developer or qa allowed)', 
+                         users: invalid_users.map { |user| { id: user.id, role: user.user_type } } },
+                 status: :unprocessable_entity
+          return
+        end
+      
+        # Check if any user is already part of another project
+        users_in_other_projects = users.select { |user| user.projects.exists? }
+      
+        if users_in_other_projects.any?
+          render json: { message: 'The following users are already assigned to other projects', 
+                         users: users_in_other_projects.map { |user| { id: user.id, name: user.name } } },
+                 status: :unprocessable_entity
+          return
+        end
+      
+        # Add the users to the project
+        project.users << users
+      
+        render json: { 
+          message: 'Users added to the project successfully',
+          users: users.map { |user| { id: user.id, role: user.role } }
+        }, status: :created
       end
-    end
+      
   
     def destroy
         project = Project.find(params[:project_id]) 
