@@ -12,10 +12,12 @@ Rails.application.routes.draw do
   get '/bugs/:project_id', to: 'bugs#index'        
   get '/bug/:id', to: 'bugs#show'
   delete '/bugs/delete/:id', to: 'bugs#destroy'
+  get '/developers/:project_id', to: 'bugs#get_developers'
+  put '/bugs/update/status/:id', to: 'bugs#update_bug_status'
 
   #Routes For Project Users
   post '/project/add-users/:project_id', to: 'project_users#create'
-  delete '/project/:project_id/remove-user/:id', to: 'project_users#destroy'
+  delete '/project/remove-user/:project_id/:id', to: 'project_users#destroy'
   get '/project/users/:project_id', to: 'project_users#index'
   get '/available-users', to: 'project_users#get_available_users'
 

@@ -176,11 +176,19 @@ Devise.setup do |config|
 
   # Options to be passed to the created cookie. For instance, you can set
   # secure: true in order to force SSL only cookies.
-  # config.rememberable_options = {}
+
+  # config.rememberable_options = { secure: Rails.env.production?, same_site: :none }
+  if Rails.env.production?
+    config.rememberable_options = { secure: true, same_site: :none }
+  else
+    config.rememberable_options = { secure: false, same_site: :none }
+  end
 
   # ==> Configuration for :validatable
   # Range for password length.
   config.password_length = 6..128
+
+  config.navigational_formats = ['*/*', :json]
 
   # Email regex used to validate email formats. It simply asserts that
   # one (and only one) @ exists in the given string. This is mainly

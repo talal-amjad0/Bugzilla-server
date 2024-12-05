@@ -3,12 +3,18 @@ class ProjectsController < ApplicationController
   before_action :authenticate_user!
   load_and_authorize_resource
 
-  # GET /projects
-  def index
-    @projects = Project.all
-
-    render json: @projects
+ 
+def index
+  if current_user.manager? 
+    @projects = Project.where(manager_id: current_user.id)  
+  elsif current_user.qa? || current_user.developer? 
+    @projects = current_user.projects  
+  else
+    @projects = []  
   end
+  render json: @projects
+end
+
 
   # GET /projects/1
   def show
@@ -19,7 +25,8 @@ class ProjectsController < ApplicationController
   def create
     request_body = JSON.parse(request.body.read)
     @project = Project.new(request_body)
-    @project.manager = current_user
+     @project.manager = current_user
+    #@project.manager_id = 13 #temporary
 
     if @project.save
       render json: { message: 'Project created successfully', project: @project }, status: :created

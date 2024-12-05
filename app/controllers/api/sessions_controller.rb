@@ -7,6 +7,7 @@ class Api::SessionsController < Devise::SessionsController
     
         super do |resource|
           sign_in(resource)
+          response.set_header('Access-Control-Allow-Credentials', 'true')
           render json: { user: resource, message: "Signed in successfully" }, status: :ok and return
         end
       end

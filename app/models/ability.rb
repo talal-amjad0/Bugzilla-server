@@ -13,6 +13,8 @@ class Ability
     # Permissions for managers (can manage projects)
     if user.manager?
       can :manage, Project
+      can :manage, ProjectUser
+
     end
 
     # Permissions for QA users (can manage bugs)
@@ -26,6 +28,7 @@ class Ability
       cannot :create, Bug  
       cannot :update, Bug  
       cannot :destroy, Bug  
+      can :update_bug_status, Bug, assignee_id: user.id
     end
   end
 end
