@@ -97,16 +97,6 @@ GEM
       responders
       warden (~> 1.2.3)
     drb (2.2.1)
-    dry-auto_inject (1.0.1)
-      dry-core (~> 1.0)
-      zeitwerk (~> 2.6)
-    dry-configurable (1.2.0)
-      dry-core (~> 1.0, < 2)
-      zeitwerk (~> 2.6)
-    dry-core (1.0.2)
-      concurrent-ruby (~> 1.0)
-      logger
-      zeitwerk (~> 2.6)
     erubi (1.13.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
@@ -117,8 +107,6 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     json (2.8.2)
-    jwt (2.9.3)
-      base64
     language_server-protocol (3.17.0.3)
     logger (1.6.2)
     loofah (2.23.1)
@@ -163,7 +151,7 @@ GEM
     pg (1.5.9)
     psych (5.2.0)
       stringio
-    puma (6.5.0)
+    puma (6.6.0)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.1.8)
@@ -255,11 +243,6 @@ GEM
     useragent (0.16.10)
     warden (1.2.9)
       rack (>= 2.0.9)
-    warden-jwt_auth (0.10.0)
-      dry-auto_inject (>= 0.8, < 2)
-      dry-configurable (>= 0.13, < 2)
-      jwt (~> 2.1)
-      warden (~> 1.2)
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -285,7 +268,6 @@ DEPENDENCIES
   rails (~> 7.2.2)
   rubocop-rails-omakase
   tzinfo-data
-  warden-jwt_auth (~> 0.10.0)
 
 BUNDLED WITH
    2.5.23
